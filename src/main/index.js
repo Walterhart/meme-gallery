@@ -72,36 +72,32 @@ function getMatchingCatsArray(){
 }
 
 // Function to get an array of unique emotions from the cats data
-function getEmotionsArray(cats){
-    const emotionsArray = []
-    for (let cat of cats){
-        for (let emotion of cat.emotionTags){
-            if (!emotionsArray.includes(emotion)){
-                emotionsArray.push(emotion)
-            }
-        }
-    }
-    return emotionsArray
+function getEmotionsArray(cats) {
+    const emotionsArray = Array.from(
+      new Set(cats.flatMap(cat => cat.emotionTags))
+    );
+    return emotionsArray;
+  }
+  
+// Function to render emotion radios based on the cats data
+function renderEmotionsRadios(cats) {
+  const emotions = getEmotionsArray(cats);
+
+  const radioItems = emotions.map(emotion => `
+    <div class="radio">
+        <label for="${emotion}">${emotion}</label>
+        <input
+            type="radio"
+            id="${emotion}"
+            value="${emotion}"
+            name="emotions"
+        >
+    </div>
+  `).join('');
+
+  emotionRadios.innerHTML = radioItems;
 }
 
-// Function to render emotion radios based on the cats data
-function renderEmotionsRadios(cats){
-    let radioItems = ``
-    const emotions = getEmotionsArray(cats)
-    for (let emotion of emotions){
-        radioItems += `
-        <div class="radio">
-            <label for="${emotion}">${emotion}</label>
-            <input
-                type="radio"
-                id="${emotion}"
-                value="${emotion}"
-                name="emotions"
-            >
-        </div>`
-    }
-    emotionRadios.innerHTML = radioItems
-}
 
 // Render the emotion radios initially
 renderEmotionsRadios(catsData)
